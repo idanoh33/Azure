@@ -26,9 +26,6 @@ $RG= New-AzureRmResourceGroup -Name $resourceGroup -Location $location
 # create Vnet
 $VNET= New-AzureRmVirtualNetwork -Name $vNetName -ResourceGroupName $resourceGroup -Location $location -AddressPrefix $VnetAddressPrefix
 
-# create Subnet
-$subnet= Add-AzureRmVirtualNetworkSubnetConfig -VirtualNetwork $VNET -Name $subnetName -AddressPrefix $VnetAddressPrefix
-Set-AzureRmVirtualNetwork -VirtualNetwork $VNET 
 
 # Create NSG rules
 $rule1 = New-AzureRmNetworkSecurityRuleConfig -Name rdp-rule -Description "Allow RDP" `
@@ -41,6 +38,11 @@ $rule2 = New-AzureRmNetworkSecurityRuleConfig -Name web-rule -Description "Allow
 
 # Create NSG
 $NSG= New-AzureRmNetworkSecurityGroup -Name "$NSGname" -ResourceGroupName $resourceGroup -Location $location -SecurityRules $rule1,$rule2
+
+
+# create Subnet
+$subnet= Add-AzureRmVirtualNetworkSubnetConfig -VirtualNetwork $VNET -Name $subnetName -AddressPrefix $SubnetAdressSpace -NetworkSecurityGroup $NSG
+Set-AzureRmVirtualNetwork -VirtualNetwork $VNET 
 
 # Create new availability set if it does not exist
     $availSet = Get-AzureRmAvailabilitySet `
