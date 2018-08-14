@@ -10,11 +10,12 @@ $certificateName= "mycert1"
 $NSGname= "nsg-" + $envSuffix 
 $ipinfo = Invoke-RestMethod http://ipinfo.io/json 
 $PublicIpName = $vmName + (Get-Random)
-$VnetAddressPrefix = '10.0.0.0/16'
-$SubnetAdressSpace = '10.0.0.0/24'
+$VnetAddressPrefix = "10.$envSuffix.0.0/16"
+$SubnetAdressSpace = "10.$envSuffix.0.0/24"
 $newAvailSetName = "AvailabilitySet-" + $envSuffix
-$vmSize= "Standard_B2ms"
+$vmSize= "Standard_DS2_v2"
 
+# Login Azure if there is no context
 if (-not (Get-AzureRmContext -ErrorAction Ignore) ){
 Login-AzureRmAccount 
 $subscription = Get-AzureRmSubscription |  Out-GridView -PassThru
@@ -23,9 +24,9 @@ Set-AzureRmContext -SubscriptionId $subscription.Id
 
 # Create Resource Group
 $RG= New-AzureRmResourceGroup -Name $resourceGroup -Location $location
+
 # create Vnet
 $VNET= New-AzureRmVirtualNetwork -Name $vNetName -ResourceGroupName $resourceGroup -Location $location -AddressPrefix $VnetAddressPrefix
-
 
 # Create NSG rules
 $rule1 = New-AzureRmNetworkSecurityRuleConfig -Name rdp-rule -Description "Allow RDP" `
@@ -74,6 +75,7 @@ $vm = New-AzureRmVm `
     -AvailabilitySetName $newAvailSetName
 
 
+# Install IIS
 Set-AzureRmVMExtension `
     -ResourceGroupName $resourceGroup `
     -ExtensionName IIS `
@@ -84,21 +86,24 @@ Set-AzureRmVMExtension `
     -SettingString '{"commandToExecute":"powershell Add-WindowsFeature Web-Server,Web-Asp-Net45,NET-Framework-Features"}' `
     -Location $location
 
-
+# Reslolve FQDN name from public IP
 $FQDN= (Get-AzureRmPublicIpAddress -Name $PublicIpName -ResourceGroupName $resourceGroup).DnsSettings.Fqdn
 
+# Create Key vault
 $keyvaultName="testvaultidan"
 $kv= New-AzureRmKeyVault -VaultName $keyvaultName `
     -ResourceGroup $resourceGroup `
     -Location $location `
     -EnabledForDeployment
 
+# Create keyVault policy
 $policy = New-AzureKeyVaultCertificatePolicy `
     -SubjectName "CN=$FQDN" `
     -SecretContentType "application/x-pkcs12" `
     -IssuerName Self `
     -ValidityInMonths 12
 
+# Create Keyvault certificate
 $kvcertificate = Add-AzureKeyVaultCertificate `
     -VaultName $keyvaultName `
     -Name $certificateName `
@@ -113,6 +118,7 @@ $certURL=(Get-AzureKeyVaultSecret -VaultName $keyvaultName -Name $certificateNam
 $vm=Get-AzureRmVM -ResourceGroupName $resourceGroup -Name $vmName
 $vaultId=(Get-AzureRmKeyVault -ResourceGroupName $resourceGroup -VaultName $keyVaultName).ResourceId
 
+# Add certificate to VM
 $vm = Add-AzureRmVMSecret -VM $vm -SourceVaultId $vaultId -CertificateStore "My" -CertificateUrl $certURL
 # In case of duplicate error use the uncomment the following
 # $vm = remove-AzureRmVMSecret -VM $vm -SourceVaultId $vaultId
@@ -121,7 +127,7 @@ Update-AzureRmVM -ResourceGroupName $resourceGroup -VM $vm
 
 
 
-############ Set IIS Certificate
+# Bind IIS Certificate
 
 $PublicSettings = '{
     "fileUris":["https://raw.githubusercontent.com/Azure-Samples/compute-automation-configurations/master/secure-iis.ps1"],
