@@ -60,20 +60,21 @@
     Write-Output "Your Primary Location is $($stg.PrimaryLocation)"
     Write-Output "Your Secondary Location is $($stg.SecondaryLocation)"
 
+    # Define start and endtime for file access 
     $StartTime = Get-Date
     $EndTime = $startTime.AddHours($TimeFrameInHours)
-    
-    
+
+    # Create New SAS token
     $sasToken = New-AzureStorageBlobSASToken -Container $container -Blob $file -Permission rwd -StartTime $StartTime -ExpiryTime $EndTime -Context $stg.Context
 
-    $secondaryUri= $stg.SecondaryEndpoints.blob + "$container" + "/$file" + $sasToken
-    $primaryUri = $stg.PrimaryEndpoints.Blob + "$container" + "/$file" + $sasToken
-    
-    
+    # Generate Uri for primary and secondary
+    $PrimaryUri = $stg.PrimaryEndpoints.Blob + "$container" + "/$file" + $sasToken
+    $SecondaryUri= $stg.SecondaryEndpoints.blob + "$container" + "/$file" + $sasToken
 
     }
     End
     {
+        # Dwonlading file
         Invoke-WebRequest -Uri $secondaryUri -OutFile $OutputFilePath
         
     }
