@@ -3,12 +3,6 @@
     [OutputType([int])]
     Param
     (
-        # Choose location for backbox VHD i.e. eastus
-        [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
-        $location,
-        
         # VHD source URI
         $sourceVHDURI = 'https://backboxstgeastus.blob.core.windows.net/eastus-cont/BackBoxv6tryFixed.vhd',
         
@@ -17,7 +11,7 @@
     )
     
     
-    
+    $location= read-host "Please enter location"
     $ErrorActionPreference = 'stop'
     $resourceGroupName = "Backbox-rg"
     $storageaccountname = "backboxstg" + ( -join (1..100 |Get-Random -Count 6))
@@ -25,10 +19,13 @@
     $vhd = Split-Path -Leaf $sourceVHDURI 
    
     if (!(Get-AzureRmResourceGroup -name $resourceGroupName -ErrorAction SilentlyContinue )) {
+        write-output "Creating New Resource group: $resourceGroupName"
         $RG = New-AzureRmResourceGroup -Name $resourceGroupName -Location $location
     } else {$RG = Get-AzureRmResourceGroup -name $resourceGroupName}
-
+    
+    write-output "Creating New Storageaccount: $storageaccountname"
     $stg = New-AzureRmStorageAccount -ResourceGroupName $rg.ResourceGroupName -Name $storageaccountname -SkuName Standard_LRS -Location $location -Kind StorageV2 -AccessTier Cool
+    write-output "Creating New Container: $contname"
     $cont = New-AzureRmStorageContainer -StorageAccountName $storageaccountname -ResourceGroupName $rg.ResourceGroupName -Name $contname
 
     Write-Output "Start Time: $(get-date)"
