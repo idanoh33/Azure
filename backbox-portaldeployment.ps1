@@ -7,13 +7,13 @@
         [Parameter(Mandatory=$true,
                    ValueFromPipelineByPropertyName=$true,
                    Position=0)]
-        $location,
-
-        # Param2 help description
-        $sourceVHDURI = 'https://backboxstgeastus.blob.core.windows.net/eastus-cont/BackBoxv6tryFixed.vhd'
-
-        #$sasToken = 'sp=r&st=2019-03-03T13:21:27Z&se=2025-01-01T21:21:27Z&spr=https&sv=2018-03-28&sig=WbuxNPNEPTIWw7qCrGbzXyC90Z4ZDwr8EKquu3wXiI8%3D&sr=b'
+        $location
     )
+        # Param2 help description
+    $sourceVHDURI = 'https://backboxstgeastus.blob.core.windows.net/eastus-cont/BackBoxv6tryFixed.vhd'
+
+    $sasToken = 'sp=r&st=2019-03-03T13:21:27Z&se=2025-01-01T21:21:27Z&spr=https&sv=2018-03-28&sig=WbuxNPNEPTIWw7qCrGbzXyC90Z4ZDwr8EKquu3wXiI8%3D&sr=b'
+    
     
     $ErrorActionPreference = 'stop'
     $resourceGroupName = "Backbox-rg"
