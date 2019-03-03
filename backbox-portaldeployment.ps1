@@ -11,7 +11,7 @@
 
         # Param2 help description
         $sourceVHDURI = 'https://backboxstgeastus.blob.core.windows.net/eastus-cont/BackBoxv6tryFixed.vhd'
-    )git 
+    )
 
     Begin
     {
