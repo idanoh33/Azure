@@ -31,7 +31,7 @@
     Write-Output "Start Time: $(get-date)"
     Write-Output "Start copy backbox VHD"
 
-    $blob = Start-AzureStorageBlobCopy -AbsoluteUri ($sourceVHDURI + $sasToken) -DestContainer $cont.Name -DestBlob $vhd -DestContext $stg.Context
+    $blob = Start-AzureStorageBlobCopy -AbsoluteUri ($sourceVHDURI + "?" + $sasToken) -DestContainer $cont.Name -DestBlob $vhd -DestContext $stg.Context
     $blob| Get-AzureStorageBlobCopyState
 
     Do {Write-Output "copy status is: $(($blob| Get-AzureStorageBlobCopyState).Status)"; sleep -Seconds 10} Until (($blob| Get-AzureStorageBlobCopyState).Status -ne "Pending")
