@@ -12,7 +12,8 @@
         # Param2 help description
         $sourceVHDURI = 'https://backboxstgeastus.blob.core.windows.net/eastus-cont/BackBoxv6tryFixed.vhd'
     )
-
+    
+    $ErrorActionPreference = 'stop'
     $resourceGroupName = "Backbox-rg"
     $storageaccountname = "backboxstg" + ( -join (1..100 |Get-Random -Count 6))
     $contname = "$storageaccountname-cont"
