@@ -1,14 +1,16 @@
     [CmdletBinding()]
     [Alias()]
     [OutputType([int])]
-    Param
+    <#Param
     (
         # Param1 help description
         [Parameter(Mandatory=$true,
                    ValueFromPipelineByPropertyName=$true,
                    Position=0)]
         $location
-    )
+    )#>
+    
+    $location= read-host "Please enter location"
         # Param2 help description
     $sourceVHDURI = 'https://backboxstgeastus.blob.core.windows.net/eastus-cont/BackBoxv6tryFixed.vhd'
 
