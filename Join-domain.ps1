@@ -7,4 +7,4 @@ $password > c:\pass.txt
 $cred = new-object -typename System.Management.Automation.PSCredential `
          -argumentlist $username, $password
 
-Add-Computer -DomainName $domainname -Credential $cred -force
+Add-Computer -DomainName $domainname -Credential $cred -force -restart
