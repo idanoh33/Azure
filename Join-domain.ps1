@@ -7,4 +7,4 @@ $password= $args[0] | ConvertTo-SecureString -AsPlainText -Force
 $cred = new-object -typename System.Management.Automation.PSCredential `
          -argumentlist $username, $password
 
-Add-Computer -DomainName $domainname -Credential $cred
+Add-Computer -DomainName $domainname -Credential $cred -force
