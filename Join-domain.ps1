@@ -1,4 +1,4 @@
-param([String]$password)
+#param([String]$password)
 $domainname= "lab.local"
 $username= "idadmin"
 $user= "$domainname\$username"
