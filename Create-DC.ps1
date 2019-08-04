@@ -20,17 +20,17 @@ $domainname = 'lab.local'
 $netbiosName = 'lab'  
 $safemodepassword = 'Passw0rd' | ConvertTo-SecureString -AsPlainText -Force 
 Import-Module ADDSDeployment 
-Install-ADDSForest ` 
--CreateDnsDelegation:$false ` 
--DatabasePath 'C:\Windows\NTDS' ` 
--DomainMode 'Win2012' ` 
--DomainName $domainname ` 
--DomainNetbiosName $netbiosName ` 
--ForestMode 'Win2012' ` 
--InstallDns:$True ` 
--LogPath 'C:\Windows\NTDS' ` 
--NoRebootOnCompletion:$false ` 
--SafeModeAdministratorPassword $safemodepassword ` 
--SysvolPath 'C:\Windows\SYSVOL' ` 
+Install-ADDSForest `
+-CreateDnsDelegation:$false `
+-DatabasePath 'C:\Windows\NTDS' `
+-DomainMode 'Win2012' `
+-DomainName $domainname `
+-DomainNetbiosName $netbiosName `
+-ForestMode 'Win2012' `
+-InstallDns:$True `
+-LogPath 'C:\Windows\NTDS' `
+-NoRebootOnCompletion:$false `
+-SafeModeAdministratorPassword $safemodepassword `
+-SysvolPath 'C:\Windows\SYSVOL' `
 -Force:$true} 
 # POWERSHELL TO EXECUTE ON REMOTE SERVER ENDS HERE
