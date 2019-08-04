@@ -2,7 +2,7 @@
 $domainname= "lab.local"
 $username= "idadmin"
 $user= "$domainname\$username"
-$password= $args[0] | convertto-securestring -asplaintext -force
+$password= $args[0] 
 $password > c:\pass.txt
 $cred = new-object -typename System.Management.Automation.PSCredential `
          -argumentlist $username, $password
