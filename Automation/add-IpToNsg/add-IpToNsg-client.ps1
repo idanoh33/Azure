@@ -25,7 +25,7 @@ function Add-IpToNsg
     }
     Process
     {
-        $response = Invoke-WebRequest -Method Post -Uri $uri -Body $body -Headers $header
+        $response = Invoke-WebRequest -Method Post -Uri $WebhookUri -Body $body -Headers $header
         $jobid = (ConvertFrom-Json ($response.Content)).jobids[0]
     }
     End
