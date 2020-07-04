@@ -45,6 +45,3 @@ function Add-IpToNsg
         $jobid 
     }
 }
-
-
-Add-IpToNsg -WebhookUri ''
