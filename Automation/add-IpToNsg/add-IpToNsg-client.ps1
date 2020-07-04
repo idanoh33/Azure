@@ -1,15 +1,3 @@
-﻿<#
-.Synopsis
-   This script will run the client computer, resolve the public IP and trigger a webhook with the IP parameter
-.DESCRIPTION
-   Long description
-.EXAMPLE
-   This script will run the client computer, resolve the public IP and trigger a webhook with the IP parameter
-   The webhook will trigger Azure automation runbook which add the client IP to NSG white list
-   
-.EXAMPLE
-   Another example of how to use this cmdlet
-#>
 function Add-IpToNsg
 {
     [CmdletBinding()]
